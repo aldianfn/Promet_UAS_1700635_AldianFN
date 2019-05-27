@@ -47,7 +47,17 @@ class C_motor extends CI_Controller {
 
   public function get_penjualan()
   {
+    $this->curl->http_header("X-Nim", "1700635");
+    $data['motor'] = json_decode($this->curl->simple_get($this->API.'/motor'))->data;
+
+    $this->curl->http_header("X-Nim", "1700635");
     $data['penjualan'] = json_decode($this->curl->simple_get($this->API.'/penjualan'))->data->terjual;
+
+    $this->curl->http_header("X-Nim", "1700635");
+    $data['cicil'] = json_decode($this->curl->simple_get($this->API.'/cicil'))->data;
+
+    $this->curl->http_header("X-Nim", "1700635");
+    $data['uangmuka'] = json_decode($this->curl->simple_get($this->API.'/uangmuka'))->data;
 
     $this->load->view('header');
 		$this->load->view('V_penjualan', $data);
@@ -56,14 +66,15 @@ class C_motor extends CI_Controller {
 	// proses untuk menambah data
 	// insert data kontak
 	function add(){
+    $this->curl->http_header("X-Nim", "1700635");
 
 		$data = array(
 			'id_motor'      =>  $this->input->post('id_motor'),
 			'id_cicil'      =>  $this->input->post('id_cicil'),
 			'id_uang_muka'      =>  $this->input->post('id_uang_muka'),
-			'cicilan_pokok'    =>  $this->input->post('cicilan_pokok'),
-			'cicilan_bunga'	  =>  $this->input->post('cicilan_bunga'),
-			'cicilan_total' =>  $this->input->post('cicilan_total'));
+			'cicilan_pokok'    =>  10000000,
+			'cicilan_bunga'	  =>  2000000,
+			'cicilan_total' =>  12000000);
 		$insert =  $this->curl->simple_post($this->API.'/penjualan', $data, array(CURLOPT_BUFFERSIZE => 0));
 
 		if($insert)
@@ -74,17 +85,18 @@ class C_motor extends CI_Controller {
 			$this->session->set_flashdata('hasil','Insert Data Gagal');
 		}
 
-		redirect('C_karyawan/get_penjualan');
+		redirect('C_motor/get_penjualan');
 
 	}
 
 
 	// proses untuk menghapus data pada database
-	function delete($id){
-		if(empty($id)){
-			redirect('C_karyawan');
+	function delete($id_penjualan){
+		if(empty($id_penjualan)){
+			redirect('C_motor/get_penjualan');
 		}else{
-			$delete =  $this->curl->simple_delete($this->API.'/Karyawan', array('id'=>$id), array(CURLOPT_BUFFERSIZE => 10));
+      $this->curl->http_header("X-Nim", "1700635");
+			$delete =  $this->curl->simple_delete($this->API.'/penjualan', array('id_penjualan'=>$id_penjualan), array(CURLOPT_BUFFERSIZE => 10));
 			if($delete)
 			{
 				$this->session->set_flashdata('hasil','Delete Data Berhasil');
@@ -93,7 +105,7 @@ class C_motor extends CI_Controller {
 				$this->session->set_flashdata('hasil','Delete Data Gagal');
 			}
 
-			redirect('C_karyawan');
+			redirect('C_motor/get_penjualan');
 		}
 	}
 

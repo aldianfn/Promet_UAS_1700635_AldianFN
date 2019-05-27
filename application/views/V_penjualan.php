@@ -22,6 +22,7 @@
 						<th>Cicilan Pokok</th>
 						<th>Cicilan Bunga</th>
 						<th>Cicilan Total</th>
+						<th>Aksi</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -37,6 +38,11 @@
 						<td><?php echo $key->cicilan_pokok; ?></td>
 						<td><?php echo $key->cicilan_bunga; ?></td>
 						<td><?php echo $key->cicilan_total; ?></td>
+						<td>
+							<a href="<?php echo base_url('c_motor/edit'); ?>">Edit</a>
+							|
+							<a href="#delete<?php echo $key->id_penjualan;?>" class="delete" data-toggle="modal">Hapus</a>
+						</td>
 					</tr>
 				<?php } ?>
 				</tbody>
@@ -52,32 +58,41 @@
 	<div id="tambahPenjualan" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="<?php echo site_url('C_motor/add'); ?>" method="post">
+				<form action="<?php echo base_url('C_motor/add'); ?>" method="post">
 					<div class="modal-header">
-						<h4 class="modal-title">Add Employee</h4>
+						<h4 class="modal-title">Tambah Penjualan</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
-						<div class="dropdown">
-						  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
-						  <span class="caret"></span></button>
-						  <ul class="dropdown-menu">
-						    <li><input type="text" name="" value=""> </li>
-						    <li><a href="#">CSS</a></li>
-						    <li><a href="#">JavaScript</a></li>
-						  </ul>
+						<div class="row">
+							<label for="">Pilih Motor</label>
 						</div>
-						<div class="form-group">
-							<label>Email</label>
-							<input type="email" name="email" class="form-control" required>
+						<div class="row">
+								<select class="custom-select" name="id_motor">
+									<?php foreach ($motor as $key) { ?>
+										<option value="<?php echo $key->id_motor; ?>"><?php echo $key->tipe_motor; ?></option>
+									<?php } ?>
+								</select>
 						</div>
-						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" name="address" required></textarea>
+						<div class="row mt-3">
+							<label for="">Pilih Tenor</label>
 						</div>
-						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" name="phone" class="form-control" required>
+						<div class="row">
+							<select class="custom-select" name="id_cicil">
+								<?php foreach ($cicil as $key) { ?>
+									<option value="<?php echo $key->id_cicil; ?>"><?php echo $key->tenor; ?></option>
+								<?php } ?>
+							</select>
+						</div>
+						<div class="row mt-3">
+							<label for="">Pilih Uang Muka</label>
+						</div>
+						<div class="row">
+							<select class="custom-select" name="id_cicil">
+								<?php foreach ($uangmuka as $key) { ?>
+									<option value="<?php echo $key->id_uang_muka; ?>"><?php echo $key->uang_muka; ?></option>
+								<?php } ?>
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -88,5 +103,34 @@
 			</div>
 		</div>
 	</div>
+
+
+	<!-- Delete -->
+	<?php
+	foreach($penjualan as $key){
+
+		?>
+		<div id="delete<?php echo $key->id_penjualan;?>" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form action="<?php echo base_url('c_motor/delete/'.$key->id_penjualan); ?>" method="POST">
+						<div class="modal-header">
+							<h4 class="modal-title">Hapus Penjualan</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							<p>Anda yakin akan menghapus data ini??</p>
+							<p class="text-warning"><small>Data tidak dapat kembali.</small></p>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+							<input type="submit" class="btn btn-danger" value="Delete">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	<?php } ?>
 </body>
 </html>
