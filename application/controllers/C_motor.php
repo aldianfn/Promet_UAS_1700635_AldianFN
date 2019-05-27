@@ -96,7 +96,7 @@ class C_motor extends CI_Controller {
 			redirect('C_motor/get_penjualan');
 		}else{
       $this->curl->http_header("X-Nim", "1700635");
-			$delete =  $this->curl->simple_delete($this->API.'/penjualan', array('id_penjualan'=>$id_penjualan), array(CURLOPT_BUFFERSIZE => 10));
+			$delete =  $this->curl->simple_delete($this->API.'/penjualan/'.$id_penjualan, array('id_penjualan'=>$id_penjualan), array(CURLOPT_BUFFERSIZE => 10));
 			if($delete)
 			{
 				$this->session->set_flashdata('hasil','Delete Data Berhasil');
@@ -109,7 +109,27 @@ class C_motor extends CI_Controller {
 		}
 	}
 
-	//TUGAS : bikin fungsi update di client menggunakan service
-	//
-	//
+  function edit($id_penjualan){
+    $this->curl->http_header("X-Nim", "1700635");
+
+		$data = array(
+			'id_motor'      =>  $this->input->post('id_motor'),
+			'id_cicil'      =>  $this->input->post('id_cicil'),
+			'id_uang_muka'      =>  $this->input->post('id_uang_muka'),
+			'cicilan_pokok'    =>  10000000,
+			'cicilan_bunga'	  =>  2000000,
+			'cicilan_total' =>  12000000);
+		$update =  $this->curl->simple_put($this->API.'/penjualan/'.$id_penjualan, $data, array(CURLOPT_BUFFERSIZE => 0));
+
+		if($insert)
+		{
+			$this->session->set_flashdata('hasil','Insert Data Berhasil');
+		}else
+		{
+			$this->session->set_flashdata('hasil','Insert Data Gagal');
+		}
+
+		redirect('C_motor/get_penjualan');
+
+	}
 }
